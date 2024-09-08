@@ -1,2 +1,4 @@
 log.txt
 vpshealthcheck
+go.sum
+.env
