@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/cade-gray/vps-health-check/internal/config"
 	"github.com/cade-gray/vps-health-check/internal/healthcheck"
@@ -13,15 +14,27 @@ func main() {
 	// Load environment variables
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
+		logging.ErrorLogger.Println("No .env file found")
+		return
 	}
 	// Load the configuration
 	config.LoadConfig()
 	// Initialize the logger
 	logging.InitializeLogger("log.txt")
 	// Log the start of the health check
-	logging.Logger.Println("Health Check Starting")
+	logging.InfoLogger.Println("Health Check Starting")
 	// Perform the health check functions
-	healthcheck.CheckAPI()
+	successTf := healthcheck.CheckAll()
 	// Log the end of the health check
-	logging.Logger.Println("Health Check Ended")
+	logging.InfoLogger.Println("Health Check Ended")
+	// Log the success or failure of the health check
+	if successTf {
+		logging.InfoLogger.Println("Health Check Successful")
+	} else {
+		logging.ErrorLogger.Println("Health Check Failed")
+		// Send an email notification
+		// email.SendEmail()
+		// Exit with a non-zero status code to indicate failure
+		os.Exit(1)
+	}
 }
