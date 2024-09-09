@@ -7,8 +7,10 @@ import (
 
 // Config struct holds all the configuration settings
 type Config struct {
-	APIURL    string
-	DBConnStr string
+	APIURL          string
+	DBConnStr       string
+	DiscordBotToken string
+	ChannelID       string
 }
 
 // AppConfig is the global configuration variable that will hold the loaded settings
@@ -26,9 +28,21 @@ func LoadConfig() *Config {
 		log.Fatal("DB_CONN_STR environment variable is required")
 	}
 
+	discordBotToken := os.Getenv("DISCORD_BOT_TOKEN")
+	if discordBotToken == "" {
+		log.Fatal("DISCORD_BOT_TOKEN environment variable is required")
+	}
+
+	channelID := os.Getenv("CHANNEL_ID")
+	if channelID == "" {
+		log.Fatal("CHANNEL_ID environment variable is required")
+	}
+
 	AppConfig = &Config{
-		APIURL:    apiURL,
-		DBConnStr: dbConnStr,
+		APIURL:          apiURL,
+		DBConnStr:       dbConnStr,
+		DiscordBotToken: discordBotToken,
+		ChannelID:       channelID,
 	}
 
 	return AppConfig

@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/cade-gray/vps-health-check/internal/alert"
 	"github.com/cade-gray/vps-health-check/internal/config"
 	"github.com/cade-gray/vps-health-check/internal/healthcheck"
 	"github.com/cade-gray/vps-health-check/internal/logging"
@@ -30,10 +31,10 @@ func main() {
 	// Log the success or failure of the health check
 	if successTf {
 		logging.InfoLogger.Println("Health Check Successful")
+		alert.Alert("Health Check Successful")
 	} else {
 		logging.ErrorLogger.Println("Health Check Failed")
-		// Send an email notification
-		// email.SendEmail()
+		alert.Alert("Health Check FAILED!")
 		// Exit with a non-zero status code to indicate failure
 		os.Exit(1)
 	}

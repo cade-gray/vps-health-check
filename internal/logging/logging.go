@@ -1,3 +1,4 @@
+// TODO: Implement lumberjack log rotation
 package logging
 
 import (
